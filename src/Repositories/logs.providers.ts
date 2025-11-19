@@ -1,0 +1,10 @@
+
+import { DataSource } from 'typeorm';
+import { logs } from '../Objects/Entities/logs.entity'
+export const photoProviders = [
+  {
+    provide: 'PHOTO_REPOSITORY',
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(logs),
+    inject: ['DATA_SOURCE'],
+  },
+];
