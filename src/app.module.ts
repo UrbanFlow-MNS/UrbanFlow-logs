@@ -3,9 +3,16 @@ import { LogsController } from './Controllers/logs.controller';
 import { LogsService } from './Services/logs.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LogsEntity } from './Objects/Entities/logs.entity';
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
   imports: [
+    ConfigModule.forRoot(
+      {
+        isGlobal : true,
+      }
+    ),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
