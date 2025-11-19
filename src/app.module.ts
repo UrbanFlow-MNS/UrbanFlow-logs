@@ -10,7 +10,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot(
       {
-        isGlobal : true;
+        isGlobal : true,
       }
     ),
     TypeOrmModule.forRoot({
