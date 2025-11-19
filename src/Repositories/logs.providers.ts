@@ -1,9 +1,9 @@
 
 import { DataSource } from 'typeorm';
 import { logs } from '../Objects/Entities/logs.entity'
-export const photoProviders = [
+export const logsProviders = [
   {
-    provide: 'PHOTO_REPOSITORY',
+    provide: 'LOGS_REPOSITORY',
     useFactory: (dataSource: DataSource) => dataSource.getRepository(logs),
     inject: ['DATA_SOURCE'],
   },
