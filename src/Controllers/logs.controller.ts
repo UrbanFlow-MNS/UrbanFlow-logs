@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 
 @Controller('logs')
-export class CatsController {
+export class LogsController {
   // TODO : Remove the placeholder
   @Get()
   findAll(): string {
