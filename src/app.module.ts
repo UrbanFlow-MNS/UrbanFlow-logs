@@ -4,6 +4,7 @@ import { LogsService } from './Services/logs.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LogsEntity } from './Objects/Entities/logs.entity';
 import { ConfigModule } from '@nestjs/config';
+import { LogsServiceToken } from './Interfaces/ILogsService';
 
 
 @Module({
@@ -26,6 +27,11 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forFeature([LogsEntity]),
   ],
     controllers: [LogsController],
-  providers: [LogsService],
+  providers: [
+    LogsService,
+    {
+    provide: LogsServiceToken,
+    useClass: LogsService,
+  }],
 })
 export class AppModule {}

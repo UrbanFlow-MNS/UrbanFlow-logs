@@ -2,7 +2,8 @@ import { Body, Controller, Get, Post, Query, ValidationPipe } from '@nestjs/comm
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
-import { ILogsService } from '../Interfaces/ILogsService';
+import type { ILogsService } from '../Interfaces/ILogsService';
+
 
 @Controller('logs')
 export class LogsController {

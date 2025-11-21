@@ -1,10 +1,9 @@
 import { LogsEntity } from '../Objects/Entities/logs.entity';
-import { Repository } from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 
+export const LogsServiceToken = Symbol('LogServiceToken');
 export interface ILogsService {
-  logsRepository: Repository<LogsEntity>;
 
   getAllLogs(): Promise<LogsEntity[]>;
 
