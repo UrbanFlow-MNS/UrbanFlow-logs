@@ -1,10 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
+import { LogsService } from '../Services/logs.service';
+import { LogsEntity } from '../Objects/Entities/logs.entity';
 
 @Controller('logs')
 export class LogsController {
-  // TODO : Remove the placeholder
+  constructor(private logsService: LogsService) {}
+
   @Get()
-  findAll(): string {
-    return 'This action returns all cats';
+  async findAll(): Promise<LogsEntity[]> {
+    return await this.logsService.getAllLogs();
   }
 }
