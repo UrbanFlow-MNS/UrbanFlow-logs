@@ -21,7 +21,7 @@ import { ConfigModule } from '@nestjs/config';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [LogsEntity],
-      synchronize: true, // TODO: à désactiver en production
+      synchronize: Boolean(process.env.POSTGRES_SYNCHRONISE)
     }),
     TypeOrmModule.forFeature([LogsEntity]),
   ],
