@@ -2,7 +2,7 @@ services:
   urbanflow-logs-db:
     image: postgres:15
     env_file:
-      - .env
+      - .env.docker
     ports:
       - "5432:5432"
     volumes:
@@ -11,7 +11,7 @@ services:
   urbanflow-logs-service:
     build: .
     env_file:
-      - .env
+      - .env.docker
     ports:
       - "3000:3000"
 
