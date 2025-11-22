@@ -21,7 +21,7 @@ export class LogsController {
     this.logsService = logsService;
   }
 
-  @Get()
+  //@Get()
   async findAll(): Promise<LogsEntity[]> {
     return await this.logsService.getAllLogs();
   }
