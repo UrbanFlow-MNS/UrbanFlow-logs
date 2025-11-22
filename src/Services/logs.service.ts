@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createQueryBuilder, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { ILogsService } from '../Interfaces/ILogsService';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
