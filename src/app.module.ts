@@ -4,7 +4,6 @@ import { LogsService } from './Services/logs.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LogsEntity } from './Objects/Entities/logs.entity';
 import { ConfigModule } from '@nestjs/config';
-import { ILogsService, LogsServiceToken } from './Interfaces/ILogsService';
 
 
 @Module({
