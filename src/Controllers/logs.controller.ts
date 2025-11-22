@@ -1,13 +1,25 @@
-import { Body, Controller, Get, Post, Query, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
-import { ILogsService } from '../Interfaces/ILogsService';
-
+import * as ILogsService from '../Interfaces/ILogsService';
 
 @Controller('logs')
 export class LogsController {
-  constructor(private readonly logsService: ILogsService) {}
+  constructor(
+    @Inject('ILogsService')
+    private readonly logsService: ILogsService.ILogsService,
+  ) {
+    this.logsService = logsService;
+  }
 
   @Get()
   async findAll(): Promise<LogsEntity[]> {
@@ -15,7 +27,9 @@ export class LogsController {
   }
 
   @Get()
-  async findWithFilters(@Query(new ValidationPipe({ transform: true})) logsFilter: LogsFilterModel ): Promise<LogsEntity[]> {
+  async findWithFilters(
+    @Query(new ValidationPipe({ transform: true })) logsFilter: LogsFilterModel,
+  ): Promise<LogsEntity[]> {
     return await this.logsService.getLogsWithParameters(logsFilter);
   }
 

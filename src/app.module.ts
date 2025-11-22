@@ -4,7 +4,7 @@ import { LogsService } from './Services/logs.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LogsEntity } from './Objects/Entities/logs.entity';
 import { ConfigModule } from '@nestjs/config';
-import { LogsServiceToken } from './Interfaces/ILogsService';
+import { ILogsService, LogsServiceToken } from './Interfaces/ILogsService';
 
 
 @Module({
@@ -30,7 +30,7 @@ import { LogsServiceToken } from './Interfaces/ILogsService';
   providers: [
     LogsService,
     {
-    provide: LogsServiceToken,
+    provide: 'ILogsService',
     useClass: LogsService,
   }],
 })
