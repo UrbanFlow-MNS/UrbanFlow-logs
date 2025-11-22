@@ -20,7 +20,7 @@ export class LogsService implements ILogsService {
   async getLogsWithParameters(logsFilterModel: LogsFilterModel) : Promise<LogsEntity[]> {
     const fetchedLogs = await this.logsRepository.find({
       where: {
-        ...(logsFilterModel.errorCode && { codeOfEvent: logsFilterModel.errorCode }), // "Spread operators", gestion des undefined
+        ...(logsFilterModel.codeOfEvent && { codeOfEvent: logsFilterModel.codeOfEvent }), // "Spread operators", gestion des undefined
         ...(logsFilterModel.microserviceName && { microserviceName: logsFilterModel.microserviceName }),
       },
     });
