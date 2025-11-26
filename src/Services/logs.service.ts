@@ -24,8 +24,17 @@ export class LogsService implements ILogsService {
         ...(logsFilterModel.microserviceName && { microserviceName: logsFilterModel.microserviceName }),
       },
     });
+    if(logsFilterModel.startingElement === undefined) {
+      logsFilterModel.startingElement = 0
+    } else if (logsFilterModel.startingElement >= fetchedLogs.length) {
+      throw new Error("The starting element is greater than the number of element")
+    }
 
-    return fetchedLogs.slice(0, logsFilterModel.numberOfElement)
+    if(logsFilterModel.numberOfElement === undefined){
+      logsFilterModel.numberOfElement = 50 // valeur max dans tout les cas pour éviter un call trop important
+    }
+
+    return fetchedLogs.slice(logsFilterModel.startingElement, logsFilterModel.numberOfElement)
   }
 
   async createLogs(logsDto: LogsDto): Promise<LogsDto> {
