@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { ILogsService } from '../Interfaces/ILogsService';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
@@ -13,12 +13,22 @@ export class LogsService implements ILogsService {
     public logsRepository: Repository<LogsEntity>,
   ) {}
 
-  async getAllLogs(): Promise<LogsEntity[]> {
+  async getAllLogs(): Promise<LogsDto[]> {
     return await this.logsRepository.find();
   }
+  async getWithId(id: number): Promise<LogsDto> {
+    const fetchedLog : LogsEntity | null = await this.logsRepository.findOne({
+      where : { id : id }
+    })
 
-  async getLogsWithParameters(logsFilterModel: LogsFilterModel) : Promise<LogsEntity[]> {
-    const fetchedLogs = await this.logsRepository.find({
+    if(fetchedLog === null){
+      throw new NotFoundException('No logs found')
+    }
+    return fetchedLog
+  }
+
+  async getLogsWithParameters(logsFilterModel: LogsFilterModel) : Promise<LogsDto[]> {
+    const fetchedLogs : LogsDto[] = await this.logsRepository.find({
       where: {
         ...(logsFilterModel.codeOfEvent && { codeOfEvent: logsFilterModel.codeOfEvent }), // "Spread operators", gestion des undefined
         ...(logsFilterModel.microserviceName && { microserviceName: logsFilterModel.microserviceName }),
@@ -41,4 +51,9 @@ export class LogsService implements ILogsService {
     const log = this.logsRepository.create(logsDto);
     return await this.logsRepository.save(log);
   }
+
+  async updateLogs(id: number, log: LogsDto): Promise<UpdateResult> {
+    return await this.logsRepository.update(id, log);
+  }
+
 }
