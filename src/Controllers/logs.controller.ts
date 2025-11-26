@@ -33,8 +33,8 @@ export class LogsController {
     return await this.logsService.getLogsWithParameters(logsFilter);
   }
 
-  @Get("{id}")
-  async getWithId(@Param() id: number,): Promise<LogsDto> {
+  @Get("/:id")
+  async getWithId(@Param('id') id: number,): Promise<LogsDto> {
     return await this.logsService.getWithId(id)
   }
   @Post()
@@ -42,8 +42,8 @@ export class LogsController {
     return await this.logsService.createLogs(log);
   }
 
-  @Put("{id}")
-  async update(@Param() id: number,@Body() log: LogsDto): Promise<UpdateResult> {
+  @Put("/:id")
+  async update(@Param('id') id: number,@Body() log: LogsDto): Promise<UpdateResult> {
     return await this.logsService.updateLogs(id, log)
   }
 }
