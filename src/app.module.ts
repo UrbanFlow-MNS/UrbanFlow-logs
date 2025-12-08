@@ -1,36 +1,47 @@
 import { Module } from '@nestjs/common';
-import { LogsController } from './Controllers/logs.controller';
-import { LogsService } from './Services/logs.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { LogsEntity } from './Objects/Entities/logs.entity';
 import { ConfigModule } from '@nestjs/config';
-
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { LogsController } from './Controllers/logs.controller';
+import { LogsEntity } from './Objects/Entities/logs.entity';
+import { LogsService } from './Services/logs.service';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(
-      {
-        isGlobal : true,
-      }
-    ),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      entities: [LogsEntity],
-      synchronize: Boolean(process.env.POSTGRES_SYNCHRONISE)
-    }),
-    TypeOrmModule.forFeature([LogsEntity]),
-  ],
+    imports: [
+        ConfigModule.forRoot(
+            {
+                isGlobal: true,
+            }
+        ),
+        TypeOrmModule.forRoot({
+            type: 'postgres',
+            host: process.env.POSTGRES_HOST,
+            port: Number(process.env.POSTGRES_PORT),
+            username: process.env.POSTGRES_USER,
+            password: process.env.POSTGRES_PASSWORD,
+            database: process.env.POSTGRES_DB,
+            entities: [LogsEntity],
+            synchronize: Boolean(process.env.POSTGRES_SYNCHRONISE)
+        }),
+        TypeOrmModule.forFeature([LogsEntity]),
+        ClientsModule.register([
+            {
+                name: 'LOGS_QUEUE_IN',
+                transport: Transport.RMQ,
+                options: {
+                    urls: [process.env.RABBIT_MQ ?? ''],
+                    queue: 'AUTH_QUEUE_OUT',
+                    queueOptions: { durable: false },
+                },
+            }
+        ])
+    ],
     controllers: [LogsController],
-  providers: [
-    LogsService,
-    {
-    provide: 'ILogsService',
-    useClass: LogsService,
-  }],
+    providers: [
+        LogsService,
+        {
+            provide: 'ILogsService',
+            useClass: LogsService,
+        }],
 })
-export class AppModule {}
+export class AppModule { }

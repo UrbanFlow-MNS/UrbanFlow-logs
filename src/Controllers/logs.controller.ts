@@ -1,25 +1,26 @@
 import {
-  Body,
-  Controller, Delete,
-  Get,
-  Inject, Param,
-  Post, Put,
-  Query,
-  ValidationPipe,
+    Body,
+    Controller, Delete,
+    Get,
+    Inject, Param,
+    Post, Put,
+    Query,
+    ValidationPipe,
 } from '@nestjs/common';
-import { LogsDto } from '../Objects/DTOs/logs.dto';
-import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
-import * as ILogsService from '../Interfaces/ILogsService';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import {
-  ApiBody,
-  ApiCreatedResponse,
-  ApiInternalServerErrorResponse,
-  ApiNotFoundResponse,
-  ApiParam,
+    ApiBody,
+    ApiCreatedResponse,
+    ApiInternalServerErrorResponse,
+    ApiNotFoundResponse,
+    ApiParam,
 } from '@nestjs/swagger';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import * as ILogsService from '../Interfaces/ILogsService';
 import { DeleteResultDto } from '../Objects/DTOs/deleteResult.dto';
+import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { UpdateResultDto } from '../Objects/DTOs/updateResult.dto';
+import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 
 @Controller('logs')
 export class LogsController {
@@ -121,4 +122,10 @@ export class LogsController {
   async delete(@Param('id') id: number): Promise<DeleteResult> {
     return await this.logsService.deleteLogs(id);
   }
+
+  @EventPattern('logs_created')
+  handleEventCreated(@Payload() data: LogsDto) {
+    console.log(`From microservice: ${data.microserviceName} and status: ${data.codeOfEvent}`);
+  }
+
 }
