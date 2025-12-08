@@ -1,20 +1,33 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('API Logs BATO')
-    .setDescription('API de gestion des logs du système BATO')
-    .setVersion('1.0')
-    .addTag('logs')
-    .build();
+    const config = new DocumentBuilder()
+        .setTitle('API Logs BATO')
+        .setDescription('API de gestion des logs du système BATO')
+        .setVersion('1.0')
+        .addTag('logs')
+        .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+    const documentFactory = () => SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, documentFactory);
 
-  await app.listen(process.env.PORT ?? 4002);
+    app.connectMicroservice<MicroserviceOptions>({
+        transport: Transport.RMQ,
+        options: {
+            urls: [process.env.RABBIT_MQ ?? ''],
+            queue: 'LOGS_QUEUE_IN',
+            queueOptions: {
+                durable: false,
+            },
+        },
+    });
+
+    await app.startAllMicroservices()
+    await app.listen(process.env.PORT ?? 4002);
 }
 bootstrap();
