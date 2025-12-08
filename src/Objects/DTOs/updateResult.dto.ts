@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ObjectId } from 'typeorm';
 
 export class UpdateResultDto {
 
