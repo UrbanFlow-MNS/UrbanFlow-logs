@@ -13,9 +13,9 @@ async function bootstrap() {
         .addTag('logs')
         .build();
 
-    const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, documentFactory);
-
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, documentFactory);
+  
     app.connectMicroservice<MicroserviceOptions>({
         transport: Transport.RMQ,
         options: {
