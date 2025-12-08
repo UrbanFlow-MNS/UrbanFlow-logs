@@ -124,7 +124,7 @@ export class LogsController {
   }
 
   @EventPattern('logs_created')
-  async handleEventCreated(@Payload() data: LogsDto) {
+  handleEventCreated(@Payload() data: LogsDto) {
     console.log(`From microservice: ${data.microserviceName} and status: ${data.codeOfEvent}`);
   }
 
