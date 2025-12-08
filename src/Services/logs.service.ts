@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  DeleteResult, LessThanOrEqual,
-  MoreThanOrEqual,
+  Between,
+  DeleteResult,
   Repository,
   UpdateResult,
 } from 'typeorm';
@@ -33,13 +33,14 @@ export class LogsService implements ILogsService {
   }
 
   async getLogsWithParameters(logsFilterModel: LogsFilterModel) : Promise<LogsDto[]> {
+    console.log(logsFilterModel);
+
     const fetchedLogs : LogsDto[] = await this.logsRepository.find({
       where: {
-        ...(logsFilterModel.codeOfEvent && { codeOfEvent: logsFilterModel.codeOfEvent }), // "Spread operators", gestion des undefined
-        ...(logsFilterModel.microserviceName && { microserviceName: logsFilterModel.microserviceName }),
-        ...(logsFilterModel.startDate && { startDate: MoreThanOrEqual(logsFilterModel.startDate) }),
-        ...(logsFilterModel.startDate && { endDate: LessThanOrEqual(logsFilterModel.startDate) }),
-      },
+        microserviceName: logsFilterModel.microserviceName,
+        codeOfEvent: logsFilterModel.codeOfEvent,
+        createdAt: Between(logsFilterModel.startDate, logsFilterModel.endDate)
+      }
     });
     if(logsFilterModel.startingElement === undefined) {
       logsFilterModel.startingElement = 0
