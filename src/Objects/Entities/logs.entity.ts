@@ -5,11 +5,9 @@ export class LogsEntity {
     @PrimaryGeneratedColumn()
     id: number;
     @Column()
-    microservice: string;
+    microserviceName: string;
     @Column()
-    microservice_id: number;
-    @Column()
-    code_of_event: string;
+    codeOfEvent: string;
     @Column()
     event: string;
 }

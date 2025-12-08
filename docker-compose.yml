@@ -1,0 +1,20 @@
+services:
+  urbanflow-logs-db:
+    image: postgres:15
+    env_file:
+      - .env.docker
+    ports:
+      - "5432:5432"
+    volumes:
+      - urbanflow-logs-db:/var/lib/postgresql/data
+
+  urbanflow-logs-service:
+    build: .
+    env_file:
+      - .env.docker
+    ports:
+      - "4002:4002"
+
+volumes:
+  urbanflow-logs-db:
+
