@@ -47,7 +47,7 @@ export class LogsController {
     return await this.logsService.updateLogs(id, log);
   }
 
-  @Delete(":/id")
+  @Delete("/:id")
   async delete(@Param('id') id: number): Promise<DeleteResult> {
     return await this.logsService.deleteLogs(id);
   }
