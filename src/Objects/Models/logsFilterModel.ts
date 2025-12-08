@@ -3,11 +3,20 @@ export class LogsFilterModel {
   startingElement: number | undefined
   codeOfEvent : string | undefined
   microserviceName : string | undefined
+  startDate : Date | undefined
+  endDate : Date | undefined
 
-  constructor(numberOfElement: number | undefined,   startingElement: number | undefined, codeOfEvent: string | undefined, microserviceName: string | undefined) {
+  constructor(numberOfElement: number | undefined,
+              startingElement: number | undefined,
+              codeOfEvent: string | undefined,
+              microserviceName: string | undefined,
+              startDate : Date |undefined,
+              endDate : Date | undefined) {
     this.numberOfElement = numberOfElement;
     this.startingElement = startingElement;
     this.codeOfEvent = codeOfEvent;
     this.microserviceName = microserviceName;
+    this.startDate = startDate;
+    this.endDate = endDate;
   }
 }

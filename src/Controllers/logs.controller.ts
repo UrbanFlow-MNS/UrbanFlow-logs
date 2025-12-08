@@ -60,6 +60,18 @@ export class LogsController {
     type: 'string',
     required: false,
   })
+  @ApiParam({
+    name: 'startDate',
+    description: 'The starting date of the range of logs you want to fetch',
+    type: 'timestamp',
+    required: false,
+  })
+  @ApiParam({
+    name: 'endDate',
+    description: 'The ending date of the range of logs you want to fetch',
+    type: 'timestamp',
+    required: false,
+  })
   @ApiNotFoundResponse({ description: 'Log not found' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @ApiCreatedResponse({

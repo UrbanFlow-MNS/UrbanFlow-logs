@@ -10,4 +10,6 @@ export class LogsEntity {
     codeOfEvent: string;
     @Column()
     event: string;
+    @Column({ type: 'timestamp', default: new Date() })
+    createdAt: Date;
 }

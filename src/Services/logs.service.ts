@@ -1,7 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult, LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { ILogsService } from '../Interfaces/ILogsService';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
@@ -32,6 +37,8 @@ export class LogsService implements ILogsService {
       where: {
         ...(logsFilterModel.codeOfEvent && { codeOfEvent: logsFilterModel.codeOfEvent }), // "Spread operators", gestion des undefined
         ...(logsFilterModel.microserviceName && { microserviceName: logsFilterModel.microserviceName }),
+        ...(logsFilterModel.startDate && { startDate: MoreThanOrEqual(logsFilterModel.startDate) }),
+        ...(logsFilterModel.startDate && { endDate: LessThanOrEqual(logsFilterModel.startDate) }),
       },
     });
     if(logsFilterModel.startingElement === undefined) {
