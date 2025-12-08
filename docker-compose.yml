@@ -13,7 +13,7 @@ services:
     env_file:
       - .env.docker
     ports:
-      - "3000:3000"
+      - "4002:4002"
 
 volumes:
   urbanflow-logs-db:
