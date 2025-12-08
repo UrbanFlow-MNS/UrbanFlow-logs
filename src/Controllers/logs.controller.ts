@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   Get,
   Inject, Param,
   Post, Put,
@@ -10,7 +10,7 @@ import {
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 import * as ILogsService from '../Interfaces/ILogsService';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Controller('logs')
 export class LogsController {
@@ -35,7 +35,7 @@ export class LogsController {
 
   @Get("/:id")
   async getWithId(@Param('id') id: number,): Promise<LogsDto> {
-    return await this.logsService.getWithId(id)
+    return await this.logsService.getWithId(id);
   }
   @Post()
   async create(@Body() log: LogsDto): Promise<LogsDto> {
@@ -44,6 +44,11 @@ export class LogsController {
 
   @Put("/:id")
   async update(@Param('id') id: number,@Body() log: LogsDto): Promise<UpdateResult> {
-    return await this.logsService.updateLogs(id, log)
+    return await this.logsService.updateLogs(id, log);
+  }
+
+  @Delete(":/id")
+  async delete(@Param('id') id: number): Promise<DeleteResult> {
+    return await this.logsService.deleteLogs(id);
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { ILogsService } from '../Interfaces/ILogsService';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
@@ -54,6 +54,10 @@ export class LogsService implements ILogsService {
 
   async updateLogs(id: number, log: LogsDto): Promise<UpdateResult> {
     return await this.logsRepository.update(id, log);
+  }
+
+  async deleteLogs(id:number): Promise<DeleteResult> {
+    return await this.logsRepository.delete(id)
   }
 
 }

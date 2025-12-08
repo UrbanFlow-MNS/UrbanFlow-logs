@@ -1,6 +1,6 @@
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 export const LogsServiceToken = Symbol('LogServiceToken');
 export interface ILogsService {
@@ -14,4 +14,6 @@ export interface ILogsService {
   updateLogs(id: number, log: LogsDto): Promise<UpdateResult>;
 
   getWithId(id: number): Promise<LogsDto>;
+
+  deleteLogs(id: number): Promise<DeleteResult>;
 }
