@@ -2,7 +2,6 @@ import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-export const LogsServiceToken = Symbol('LogServiceToken');
 export interface ILogsService {
 
   getAllLogs(): Promise<LogsDto[]>;
