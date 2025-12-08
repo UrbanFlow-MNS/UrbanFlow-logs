@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LogsController } from './Controllers/logs.controller';
 import { LogsEntity } from './Objects/Entities/logs.entity';
@@ -23,18 +22,7 @@ import { LogsService } from './Services/logs.service';
             entities: [LogsEntity],
             synchronize: Boolean(process.env.POSTGRES_SYNCHRONISE)
         }),
-        TypeOrmModule.forFeature([LogsEntity]),
-        ClientsModule.register([
-            {
-                name: 'LOGS_QUEUE_IN',
-                transport: Transport.RMQ,
-                options: {
-                    urls: [process.env.RABBIT_MQ ?? ''],
-                    queue: 'AUTH_QUEUE_OUT',
-                    queueOptions: { durable: false },
-                },
-            }
-        ])
+        TypeOrmModule.forFeature([LogsEntity])
     ],
     controllers: [LogsController],
     providers: [
