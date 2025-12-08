@@ -102,7 +102,7 @@ export class LogsController {
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @ApiCreatedResponse({
     description: 'Update successful',
-    type: UpdateResultDto
+    type: UpdateResultDto,
   })
   @Put('/:id')
   async update(
@@ -124,8 +124,8 @@ export class LogsController {
   }
 
   @EventPattern('logs_created')
-  handleEventCreated(@Payload() data: LogsDto) {
-    console.log(`From microservice: ${data.microserviceName} and status: ${data.codeOfEvent}`);
+  async handleEventCreated(@Payload() data: LogsDto) {
+    await this.logsService.createLogs(data);
   }
 
 }
