@@ -5,7 +5,6 @@ import {
     Inject, Param,
     Post, Put,
     Query,
-    ValidationPipe,
 } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import {
@@ -20,7 +19,6 @@ import * as ILogsService from '../Interfaces/ILogsService';
 import { DeleteResultDto } from '../Objects/DTOs/deleteResult.dto';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { UpdateResultDto } from '../Objects/DTOs/updateResult.dto';
-import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 
 @Controller('logs')
 export class LogsController {

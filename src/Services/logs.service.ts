@@ -2,8 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  Between,
-  DeleteResult, LessThanOrEqual, MoreThanOrEqual,
+  DeleteResult,
   Repository,
   UpdateResult,
 } from 'typeorm';
