@@ -11,6 +11,13 @@ import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 import * as ILogsService from '../Interfaces/ILogsService';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 
 @Controller('logs')
 export class LogsController {
@@ -26,6 +33,16 @@ export class LogsController {
     return await this.logsService.getAllLogs();
   }
 
+  @ApiParam({ name: 'numberOfElement', description: 'Number of Element you want to fetch', type: 'number', required: false })
+  @ApiParam({ name: 'startingElement', description: 'The index of the first element you want to fetch', type: 'number', required: false })
+  @ApiParam({ name: 'codeOfEvent', description: 'The HTTP code you are searching for', type: 'string', required: false })
+  @ApiParam({ name: 'microserviceName', description: 'The name of the microservice you are looking for', type: 'string', required: false })
+  @ApiNotFoundResponse({description : 'Page not found'})
+  @ApiInternalServerErrorResponse({description : 'Internal server error'})
+  @ApiCreatedResponse({
+    description : 'Search successful',
+    type: LogsDto,
+  })
   @Get()
   async findWithFilters(
     @Query(new ValidationPipe({ transform: true })) logsFilter: LogsFilterModel,
@@ -37,6 +54,13 @@ export class LogsController {
   async getWithId(@Param('id') id: number,): Promise<LogsDto> {
     return await this.logsService.getWithId(id);
   }
+
+  @ApiBody({ type: LogsDto})
+  @ApiInternalServerErrorResponse({description : 'Internal server error'})
+  @ApiCreatedResponse({
+    description : 'Creation successful',
+    type: LogsDto,
+  })
   @Post()
   async create(@Body() log: LogsDto): Promise<LogsDto> {
     return await this.logsService.createLogs(log);
