@@ -80,9 +80,14 @@ export class LogsController {
   })
   @Get()
   async findWithFilters(
-    @Query(new ValidationPipe({ transform: true })) logsFilter: LogsFilterModel,
+    @Query()   numberOfElement?: number,
+    @Query()   startingElement?: number,
+    @Query()   codeOfEvent? : string ,
+    @Query()   microserviceName? : string ,
+    @Query()   startDate? : Date,
+    @Query()   endDate? : Date
   ): Promise<LogsDto[]> {
-    return await this.logsService.getLogsWithParameters(logsFilter);
+    return await this.logsService.getLogsWithParameters(numberOfElement,startingElement,codeOfEvent,microserviceName,startDate,endDate);
   }
 
   @ApiParam({ name: 'id', type: 'number', required: true })

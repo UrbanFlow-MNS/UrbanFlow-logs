@@ -3,7 +3,7 @@ import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   Between,
-  DeleteResult,
+  DeleteResult, LessThanOrEqual, MoreThanOrEqual,
   Repository,
   UpdateResult,
 } from 'typeorm';
@@ -32,15 +32,30 @@ export class LogsService implements ILogsService {
     return fetchedLog
   }
 
-  async getLogsWithParameters(logsFilterModel: LogsFilterModel) : Promise<LogsDto[]> {
+  async getLogsWithParameters(
+    numberOfElement?: number,
+    startingElement?: number,
+    codeOfEvent? : string,
+    microserviceName? : string,
+    startDate? : Date,
+    endDate? : Date
+  ) : Promise<LogsDto[]> {
+
+    const logsFilterModel : LogsFilterModel = {
+      numberOfElement : numberOfElement,
+      startingElement : startingElement,
+      codeOfEvent : codeOfEvent,
+      microserviceName : microserviceName,
+      startDate : startDate,
+      endDate : endDate,
+    }
     console.log(logsFilterModel);
 
     const fetchedLogs : LogsDto[] = await this.logsRepository.find({
       where: {
         microserviceName: logsFilterModel.microserviceName,
         codeOfEvent: logsFilterModel.codeOfEvent,
-        createdAt: Between(logsFilterModel.startDate, logsFilterModel.endDate)
-      }
+      },
     });
     if(logsFilterModel.startingElement === undefined) {
       logsFilterModel.startingElement = 0
