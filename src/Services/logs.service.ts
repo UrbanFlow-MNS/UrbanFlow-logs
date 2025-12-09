@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { ILogsService } from '../Interfaces/ILogsService';
-import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 
 @Injectable()
 export class LogsService implements ILogsService {
@@ -40,33 +39,25 @@ export class LogsService implements ILogsService {
     endDate? : Date
   ) : Promise<LogsDto[]> {
 
-    const logsFilterModel : LogsFilterModel = {
-      numberOfElement : numberOfElement,
-      startingElement : startingElement,
-      codeOfEvent : codeOfEvent,
-      microserviceName : microserviceName,
-      startDate : startDate,
-      endDate : endDate,
-    }
-    console.log(logsFilterModel);
+    console.log(numberOfElement, startingElement, codeOfEvent, microserviceName, startDate, endDate);
 
     const fetchedLogs : LogsDto[] = await this.logsRepository.find({
       where: {
-        microserviceName: logsFilterModel.microserviceName,
-        codeOfEvent: logsFilterModel.codeOfEvent,
+        microserviceName: microserviceName,
+        codeOfEvent: codeOfEvent,
       },
     });
-    if(logsFilterModel.startingElement === undefined) {
-      logsFilterModel.startingElement = 0
-    } else if (logsFilterModel.startingElement >= fetchedLogs.length) {
+    if(startingElement === undefined) {
+      startingElement = 0
+    } else if (startingElement >= fetchedLogs.length) {
       throw new Error("The starting element is greater than the number of element")
     }
 
-    if(logsFilterModel.numberOfElement === undefined){
-      logsFilterModel.numberOfElement = 50 // valeur max dans tout les cas pour éviter un call trop important
+    if(numberOfElement === undefined){
+      numberOfElement = 50 // valeur max dans tout les cas pour éviter un call trop important
     }
 
-    return fetchedLogs.slice(logsFilterModel.startingElement, logsFilterModel.numberOfElement)
+    return fetchedLogs.slice(startingElement, numberOfElement)
   }
 
   async createLogs(logsDto: LogsDto): Promise<LogsDto> {

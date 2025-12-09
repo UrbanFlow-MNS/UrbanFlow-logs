@@ -78,12 +78,12 @@ export class LogsController {
   })
   @Get()
   async findWithFilters(
-    @Query()   numberOfElement?: number,
-    @Query()   startingElement?: number,
-    @Query()   codeOfEvent? : string ,
-    @Query()   microserviceName? : string ,
-    @Query()   startDate? : Date,
-    @Query()   endDate? : Date
+    @Query('numberOfElement') numberOfElement?: number,
+    @Query('startingElement') startingElement?: number,
+    @Query('codeOfEvent') codeOfEvent? : string ,
+    @Query('microserviceName') microserviceName? : string ,
+    @Query('startDate') startDate? : Date,
+    @Query('endDate') endDate? : Date
   ): Promise<LogsDto[]> {
     return await this.logsService.getLogsWithParameters(numberOfElement,startingElement,codeOfEvent,microserviceName,startDate,endDate);
   }

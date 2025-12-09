@@ -6,12 +6,12 @@ export interface ILogsService {
   getAllLogs(): Promise<LogsDto[]>;
 
   getLogsWithParameters(
-    numberOfElement: number | undefined,
-    startingElement: number | undefined,
-    codeOfEvent : string | undefined,
-    microserviceName : string | undefined,
-    startDate : Date | undefined,
-    endDate : Date | undefined
+    numberOfElement?: number,
+    startingElement?: number,
+    codeOfEvent?: string,
+    microserviceName?: string,
+    startDate?: Date,
+    endDate?: Date
   ): Promise<LogsDto[]>;
 
   createLogs(logsDto: LogsDto): Promise<LogsDto>;
