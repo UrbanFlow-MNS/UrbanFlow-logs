@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  Between,
   DeleteResult,
   Repository,
   UpdateResult,
@@ -41,11 +42,10 @@ export class LogsService implements ILogsService {
 
     console.log(numberOfElement, startingElement, codeOfEvent, microserviceName, startDate, endDate);
 
-    const fetchedLogs : LogsDto[] = await this.logsRepository.find({
-      where: {
+    const fetchedLogs : LogsDto[] = await this.logsRepository.findBy({
         microserviceName: microserviceName,
         codeOfEvent: codeOfEvent,
-      },
+        createdAt: Between(startDate, endDate)
     });
     if(startingElement === undefined) {
       startingElement = 0
