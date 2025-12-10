@@ -3,7 +3,7 @@ import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   Between,
-  DeleteResult,
+  DeleteResult, FindOperator, LessThanOrEqual, MoreThanOrEqual,
   Repository,
   UpdateResult,
 } from 'typeorm';
@@ -31,6 +31,7 @@ export class LogsService implements ILogsService {
     return fetchedLog
   }
 
+
   async getLogsWithParameters(
     numberOfElement?: number,
     startingElement?: number,
@@ -42,10 +43,14 @@ export class LogsService implements ILogsService {
 
     console.log(numberOfElement, startingElement, codeOfEvent, microserviceName, startDate, endDate);
 
-    const fetchedLogs : LogsDto[] = await this.logsRepository.findBy({
+    console.log(this.getDateFindOperator(startDate, endDate))
+
+    const fetchedLogs : LogsDto[] = await this.logsRepository.find({
+      where : {
         microserviceName: microserviceName,
         codeOfEvent: codeOfEvent,
-        createdAt: Between(startDate, endDate)
+        createdAt: this.getDateFindOperator(startDate, endDate)
+      }
     });
     if(startingElement === undefined) {
       startingElement = 0
@@ -71,6 +76,21 @@ export class LogsService implements ILogsService {
 
   async deleteLogs(id:number): Promise<DeleteResult> {
     return await this.logsRepository.delete(id)
+  }
+
+  // Utils
+  getDateFindOperator(startDate?: Date, endDate?: Date): FindOperator<Date> | undefined {
+    if(startDate == undefined && endDate == undefined)
+      return undefined
+
+    if (startDate != undefined && endDate != undefined)
+      return Between(startDate, endDate)
+
+    if(endDate != undefined)
+      return LessThanOrEqual(endDate)
+
+    if(startDate != undefined)
+      return MoreThanOrEqual(startDate)
   }
 
 }

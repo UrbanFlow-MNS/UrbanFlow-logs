@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class LogsEntity {
@@ -10,6 +10,6 @@ export class LogsEntity {
     codeOfEvent: string;
     @Column()
     event: string;
-    @Column({ type: 'timestamp', default: new Date() })
+    @CreateDateColumn()
     createdAt: Date;
 }
