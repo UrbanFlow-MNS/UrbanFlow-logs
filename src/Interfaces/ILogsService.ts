@@ -10,8 +10,8 @@ export interface ILogsService {
     startingElement?: number,
     codeOfEvent?: string,
     microserviceName?: string,
-    startDate?: Date,
-    endDate?: Date
+    startDate?: string,
+    endDate?: string
   ): Promise<LogsDto[]>;
 
   createLogs(logsDto: LogsDto): Promise<LogsDto>;

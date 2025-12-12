@@ -37,19 +37,24 @@ export class LogsService implements ILogsService {
     startingElement?: number,
     codeOfEvent? : string,
     microserviceName? : string,
-    startDate? : Date,
-    endDate? : Date
+    startDate? : string,
+    endDate? : string
   ) : Promise<LogsDto[]> {
 
-    console.log(numberOfElement, startingElement, codeOfEvent, microserviceName, startDate, endDate);
-
-    console.log(this.getDateFindOperator(startDate, endDate))
+    let parsedStartDate : Date | undefined
+    let parsedEndDate : Date | undefined
+    if(startDate !== undefined){
+      parsedStartDate = new Date(Date.parse(startDate))
+    }
+    if(endDate !== undefined){
+      parsedEndDate = new Date(Date.parse(endDate))
+    }
 
     const fetchedLogs : LogsDto[] = await this.logsRepository.find({
       where : {
         microserviceName: microserviceName,
         codeOfEvent: codeOfEvent,
-        createdAt: this.getDateFindOperator(startDate, endDate)
+        createdAt: this.getDateFindOperator(parsedStartDate, parsedEndDate)
       }
     });
     if(startingElement === undefined) {

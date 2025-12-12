@@ -61,13 +61,13 @@ export class LogsController {
   @ApiParam({
     name: 'startDate',
     description: 'The starting date of the range of logs you want to fetch',
-    type: 'timestamp',
+    type: 'string',
     required: false,
   })
   @ApiParam({
     name: 'endDate',
     description: 'The ending date of the range of logs you want to fetch',
-    type: 'timestamp',
+    type: 'string',
     required: false,
   })
   @ApiNotFoundResponse({ description: 'Log not found' })
@@ -82,8 +82,8 @@ export class LogsController {
     @Query('startingElement') startingElement?: number,
     @Query('codeOfEvent') codeOfEvent? : string ,
     @Query('microserviceName') microserviceName? : string ,
-    @Query('startDate') startDate? : Date,
-    @Query('endDate') endDate? : Date
+    @Query('startDate') startDate? : string,
+    @Query('endDate') endDate? : string
   ): Promise<LogsDto[]> {
     return await this.logsService.getLogsWithParameters(numberOfElement,startingElement,codeOfEvent,microserviceName,startDate,endDate);
   }
