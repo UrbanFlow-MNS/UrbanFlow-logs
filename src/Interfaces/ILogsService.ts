@@ -1,12 +1,18 @@
 import { LogsDto } from '../Objects/DTOs/logs.dto';
-import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
 export interface ILogsService {
 
   getAllLogs(): Promise<LogsDto[]>;
 
-  getLogsWithParameters(logsFilterModel : LogsFilterModel): Promise<LogsDto[]>;
+  getLogsWithParameters(
+    numberOfElement?: number,
+    startingElement?: number,
+    codeOfEvent?: string,
+    microserviceName?: string,
+    startDate?: string,
+    endDate?: string
+  ): Promise<LogsDto[]>;
 
   createLogs(logsDto: LogsDto): Promise<LogsDto>;
 

@@ -5,7 +5,6 @@ import {
     Inject, Param,
     Post, Put,
     Query,
-    ValidationPipe,
 } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import {
@@ -20,7 +19,6 @@ import * as ILogsService from '../Interfaces/ILogsService';
 import { DeleteResultDto } from '../Objects/DTOs/deleteResult.dto';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { UpdateResultDto } from '../Objects/DTOs/updateResult.dto';
-import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 
 @Controller('logs')
 export class LogsController {
@@ -63,13 +61,13 @@ export class LogsController {
   @ApiParam({
     name: 'startDate',
     description: 'The starting date of the range of logs you want to fetch',
-    type: 'timestamp',
+    type: 'string',
     required: false,
   })
   @ApiParam({
     name: 'endDate',
     description: 'The ending date of the range of logs you want to fetch',
-    type: 'timestamp',
+    type: 'string',
     required: false,
   })
   @ApiNotFoundResponse({ description: 'Log not found' })
@@ -80,9 +78,14 @@ export class LogsController {
   })
   @Get()
   async findWithFilters(
-    @Query(new ValidationPipe({ transform: true })) logsFilter: LogsFilterModel,
+    @Query('numberOfElement') numberOfElement?: number,
+    @Query('startingElement') startingElement?: number,
+    @Query('codeOfEvent') codeOfEvent? : string ,
+    @Query('microserviceName') microserviceName? : string ,
+    @Query('startDate') startDate? : string,
+    @Query('endDate') endDate? : string
   ): Promise<LogsDto[]> {
-    return await this.logsService.getLogsWithParameters(logsFilter);
+    return await this.logsService.getLogsWithParameters(numberOfElement,startingElement,codeOfEvent,microserviceName,startDate,endDate);
   }
 
   @ApiParam({ name: 'id', type: 'number', required: true })

@@ -2,14 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  DeleteResult, LessThanOrEqual,
-  MoreThanOrEqual,
+  Between,
+  DeleteResult, FindOperator, LessThanOrEqual, MoreThanOrEqual,
   Repository,
   UpdateResult,
 } from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { ILogsService } from '../Interfaces/ILogsService';
-import { LogsFilterModel } from '../Objects/Models/logsFilterModel';
 
 @Injectable()
 export class LogsService implements ILogsService {
@@ -32,26 +31,43 @@ export class LogsService implements ILogsService {
     return fetchedLog
   }
 
-  async getLogsWithParameters(logsFilterModel: LogsFilterModel) : Promise<LogsDto[]> {
+
+  async getLogsWithParameters(
+    numberOfElement?: number,
+    startingElement?: number,
+    codeOfEvent? : string,
+    microserviceName? : string,
+    startDate? : string,
+    endDate? : string
+  ) : Promise<LogsDto[]> {
+
+    let parsedStartDate : Date | undefined
+    let parsedEndDate : Date | undefined
+    if(startDate !== undefined){
+      parsedStartDate = new Date(Date.parse(startDate))
+    }
+    if(endDate !== undefined){
+      parsedEndDate = new Date(Date.parse(endDate))
+    }
+
     const fetchedLogs : LogsDto[] = await this.logsRepository.find({
-      where: {
-        ...(logsFilterModel.codeOfEvent && { codeOfEvent: logsFilterModel.codeOfEvent }), // "Spread operators", gestion des undefined
-        ...(logsFilterModel.microserviceName && { microserviceName: logsFilterModel.microserviceName }),
-        ...(logsFilterModel.startDate && { startDate: MoreThanOrEqual(logsFilterModel.startDate) }),
-        ...(logsFilterModel.startDate && { endDate: LessThanOrEqual(logsFilterModel.startDate) }),
-      },
+      where : {
+        microserviceName: microserviceName,
+        codeOfEvent: codeOfEvent,
+        createdAt: this.getDateFindOperator(parsedStartDate, parsedEndDate)
+      }
     });
-    if(logsFilterModel.startingElement === undefined) {
-      logsFilterModel.startingElement = 0
-    } else if (logsFilterModel.startingElement >= fetchedLogs.length) {
+    if(startingElement === undefined) {
+      startingElement = 0
+    } else if (startingElement >= fetchedLogs.length) {
       throw new Error("The starting element is greater than the number of element")
     }
 
-    if(logsFilterModel.numberOfElement === undefined){
-      logsFilterModel.numberOfElement = 50 // valeur max dans tout les cas pour éviter un call trop important
+    if(numberOfElement === undefined){
+      numberOfElement = 50 // valeur max dans tout les cas pour éviter un call trop important
     }
 
-    return fetchedLogs.slice(logsFilterModel.startingElement, logsFilterModel.numberOfElement)
+    return fetchedLogs.slice(startingElement, numberOfElement)
   }
 
   async createLogs(logsDto: LogsDto): Promise<LogsDto> {
@@ -65,6 +81,21 @@ export class LogsService implements ILogsService {
 
   async deleteLogs(id:number): Promise<DeleteResult> {
     return await this.logsRepository.delete(id)
+  }
+
+  // Utils
+  getDateFindOperator(startDate?: Date, endDate?: Date): FindOperator<Date> | undefined {
+    if(startDate == undefined && endDate == undefined)
+      return undefined
+
+    if (startDate != undefined && endDate != undefined)
+      return Between(startDate, endDate)
+
+    if(endDate != undefined)
+      return LessThanOrEqual(endDate)
+
+    if(startDate != undefined)
+      return MoreThanOrEqual(startDate)
   }
 
 }
