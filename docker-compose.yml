@@ -20,7 +20,7 @@ services:
     env_file:
       - .env.docker
     ports:
-      - "5432:5432"
+      - "5002:5432"
     volumes:
       - logs-db:/var/lib/postgresql/data
     networks:
