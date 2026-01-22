@@ -10,7 +10,6 @@ async function bootstrap() {
         .setTitle('API Logs BATO')
         .setDescription('API de gestion des logs du système BATO')
         .setVersion('1.0')
-        .addTag('logs')
         .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);

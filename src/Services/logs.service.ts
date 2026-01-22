@@ -6,7 +6,7 @@ import {
   Repository,
   UpdateResult,
 } from 'typeorm';
-import { LogsDto } from '../Objects/DTOs/logs.dto';
+import { LogBody } from '@bato-urbanflow/urbanflow-models';
 import { ILogsService } from '../Objects/Interfaces/ILogsService';
 import { dateUtils } from '@bato-urbanflow/urbanflow-models'
 
@@ -17,10 +17,10 @@ export class LogsService implements ILogsService {
     public logsRepository: Repository<LogsEntity>,
   ) {}
 
-  async getAllLogs(): Promise<LogsDto[]> {
+  async getAllLogs(): Promise<LogBody[]> {
     return await this.logsRepository.find();
   }
-  async getWithId(id: number): Promise<LogsDto> {
+  async getWithId(id: number): Promise<LogBody> {
     const fetchedLog : LogsEntity | null = await this.logsRepository.findOne({
       where : { id : id }
     })
@@ -39,7 +39,7 @@ export class LogsService implements ILogsService {
     microserviceName? : string,
     startDate? : string,
     endDate? : string
-  ) : Promise<LogsDto[]> {
+  ) : Promise<LogBody[]> {
 
     let parsedStartDate : Date | undefined
     let parsedEndDate : Date | undefined
@@ -50,7 +50,7 @@ export class LogsService implements ILogsService {
       parsedEndDate = new Date(Date.parse(endDate))
     }
 
-    const fetchedLogs : LogsDto[] = await this.logsRepository.find({
+    const fetchedLogs : LogBody[] = await this.logsRepository.find({
       where : {
         microserviceName: microserviceName,
         codeOfEvent: codeOfEvent,
@@ -70,12 +70,12 @@ export class LogsService implements ILogsService {
     return fetchedLogs.slice(startingElement, numberOfElement)
   }
 
-  async createLogs(logsDto: LogsDto): Promise<LogsDto> {
+  async createLogs(logsDto: LogBody): Promise<LogBody> {
     const log = this.logsRepository.create(logsDto);
     return await this.logsRepository.save(log);
   }
 
-  async updateLogs(id: number, log: LogsDto): Promise<UpdateResult> {
+  async updateLogs(id: number, log: LogBody): Promise<UpdateResult> {
     return await this.logsRepository.update(id, log);
   }
 
