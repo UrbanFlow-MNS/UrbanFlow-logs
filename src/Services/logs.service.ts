@@ -2,13 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LogsEntity } from '../Objects/Entities/logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  Between,
-  DeleteResult, FindOperator, LessThanOrEqual, MoreThanOrEqual,
+  DeleteResult,
   Repository,
   UpdateResult,
 } from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { ILogsService } from '../Objects/Interfaces/ILogsService';
+import { dateUtils } from '@bato-urbanflow/urbanflow-models'
 
 @Injectable()
 export class LogsService implements ILogsService {
@@ -54,7 +54,7 @@ export class LogsService implements ILogsService {
       where : {
         microserviceName: microserviceName,
         codeOfEvent: codeOfEvent,
-        createdAt: this.getDateFindOperator(parsedStartDate, parsedEndDate)
+        createdAt: dateUtils.getDateFindOperator(parsedStartDate, parsedEndDate)
       }
     });
     if(startingElement === undefined) {
@@ -83,19 +83,5 @@ export class LogsService implements ILogsService {
     return await this.logsRepository.delete(id)
   }
 
-  // Utils
-  getDateFindOperator(startDate?: Date, endDate?: Date): FindOperator<Date> | undefined {
-    if(startDate == undefined && endDate == undefined)
-      return undefined
-
-    if (startDate != undefined && endDate != undefined)
-      return Between(startDate, endDate)
-
-    if(endDate != undefined)
-      return LessThanOrEqual(endDate)
-
-    if(startDate != undefined)
-      return MoreThanOrEqual(startDate)
-  }
 
 }

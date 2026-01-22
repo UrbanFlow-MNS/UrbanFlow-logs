@@ -19,6 +19,7 @@ import * as ILogsService from '../Objects/Interfaces/ILogsService';
 import { DeleteResultDto } from '../Objects/DTOs/deleteResult.dto';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { UpdateResultDto } from '../Objects/DTOs/updateResult.dto';
+import { LogEventType } from '@bato-urbanflow/urbanflow-models';
 
 @Controller('logs')
 export class LogsController {
@@ -138,7 +139,7 @@ export class LogsController {
     return await this.logsService.deleteLogs(id);
   }
 
-  @EventPattern('logs.created')
+  @EventPattern(LogEventType.LOGS_CREATE)
   async handleEventCreated(@Payload() data: LogsDto) {
     await this.logsService.createLogs(data);
   }
