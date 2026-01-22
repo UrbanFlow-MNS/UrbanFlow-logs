@@ -138,7 +138,7 @@ export class LogsController {
     return await this.logsService.deleteLogs(id);
   }
 
-  @EventPattern('logs_created')
+  @EventPattern('logs.created')
   async handleEventCreated(@Payload() data: LogsDto) {
     await this.logsService.createLogs(data);
   }
