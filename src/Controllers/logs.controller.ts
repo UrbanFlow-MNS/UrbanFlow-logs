@@ -15,7 +15,7 @@ import {
     ApiParam,
 } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import * as ILogsService from '../Interfaces/ILogsService';
+import * as ILogsService from '../Objects/Interfaces/ILogsService';
 import { DeleteResultDto } from '../Objects/DTOs/deleteResult.dto';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { UpdateResultDto } from '../Objects/DTOs/updateResult.dto';

@@ -8,7 +8,7 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { LogsDto } from '../Objects/DTOs/logs.dto';
-import { ILogsService } from '../Interfaces/ILogsService';
+import { ILogsService } from '../Objects/Interfaces/ILogsService';
 
 @Injectable()
 export class LogsService implements ILogsService {

@@ -1,4 +1,4 @@
-import { LogsDto } from '../Objects/DTOs/logs.dto';
+import { LogsDto } from '../DTOs/logs.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
 export interface ILogsService {
