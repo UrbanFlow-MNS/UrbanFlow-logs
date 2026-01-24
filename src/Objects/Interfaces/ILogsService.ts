@@ -1,9 +1,9 @@
-import { LogsDto } from '../Objects/DTOs/logs.dto';
+import { LogBody } from '@bato-urbanflow/urbanflow-models';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
 export interface ILogsService {
 
-  getAllLogs(): Promise<LogsDto[]>;
+  getAllLogs(): Promise<LogBody[]>;
 
   getLogsWithParameters(
     numberOfElement?: number,
@@ -12,13 +12,13 @@ export interface ILogsService {
     microserviceName?: string,
     startDate?: string,
     endDate?: string
-  ): Promise<LogsDto[]>;
+  ): Promise<LogBody[]>;
 
-  createLogs(logsDto: LogsDto): Promise<LogsDto>;
+  createLogs(logsDto: LogBody): Promise<LogBody>;
 
-  updateLogs(id: number, log: LogsDto): Promise<UpdateResult>;
+  updateLogs(id: number, log: LogBody): Promise<UpdateResult>;
 
-  getWithId(id: number): Promise<LogsDto>;
+  getWithId(id: number): Promise<LogBody>;
 
   deleteLogs(id: number): Promise<DeleteResult>;
 }

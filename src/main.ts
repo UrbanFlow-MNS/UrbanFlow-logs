@@ -10,7 +10,6 @@ async function bootstrap() {
         .setTitle('API Logs BATO')
         .setDescription('API de gestion des logs du système BATO')
         .setVersion('1.0')
-        .addTag('logs')
         .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
@@ -20,7 +19,7 @@ async function bootstrap() {
         transport: Transport.RMQ,
         options: {
             urls: [process.env.RABBIT_MQ ?? ''],
-            queue: 'LOGS_QUEUE_IN',
+            queue: 'LOGS_QUEUE',
             queueOptions: {
                 durable: false,
             },

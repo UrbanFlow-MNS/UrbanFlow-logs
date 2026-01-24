@@ -15,10 +15,10 @@ import {
     ApiParam,
 } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import * as ILogsService from '../Interfaces/ILogsService';
+import * as ILogsService from '../Objects/Interfaces/ILogsService';
 import { DeleteResultDto } from '../Objects/DTOs/deleteResult.dto';
-import { LogsDto } from '../Objects/DTOs/logs.dto';
 import { UpdateResultDto } from '../Objects/DTOs/updateResult.dto';
+import { LogEventType, LogBody } from '@bato-urbanflow/urbanflow-models';
 
 @Controller('logs')
 export class LogsController {
@@ -30,7 +30,7 @@ export class LogsController {
   }
 
   //@Get()
-  async findAll(): Promise<LogsDto[]> {
+  async findAll(): Promise<LogBody[]> {
     return await this.logsService.getAllLogs();
   }
 
@@ -74,7 +74,7 @@ export class LogsController {
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @ApiCreatedResponse({
     description: 'Search successful',
-    type: LogsDto,
+    type: LogBody,
   })
   @Get()
   async findWithFilters(
@@ -84,7 +84,7 @@ export class LogsController {
     @Query('microserviceName') microserviceName? : string ,
     @Query('startDate') startDate? : string,
     @Query('endDate') endDate? : string
-  ): Promise<LogsDto[]> {
+  ): Promise<LogBody[]> {
     return await this.logsService.getLogsWithParameters(numberOfElement,startingElement,codeOfEvent,microserviceName,startDate,endDate);
   }
 
@@ -93,25 +93,25 @@ export class LogsController {
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @ApiCreatedResponse({
     description: 'Search successful',
-    type: LogsDto,
+    type: LogBody,
   })
   @Get('/:id')
-  async getWithId(@Param('id') id: number): Promise<LogsDto> {
+  async getWithId(@Param('id') id: number): Promise<LogBody> {
     return await this.logsService.getWithId(id);
   }
 
-  @ApiBody({ type: LogsDto })
+  @ApiBody({ type: LogBody })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @ApiCreatedResponse({
     description: 'Creation successful',
-    type: LogsDto,
+    type: LogBody,
   })
   @Post()
-  async create(@Body() log: LogsDto): Promise<LogsDto> {
+  async create(@Body() log: LogBody): Promise<LogBody> {
     return await this.logsService.createLogs(log);
   }
 
-  @ApiBody({ type: LogsDto })
+  @ApiBody({ type: LogBody })
   @ApiParam({ name: 'id', type: 'number', required: true })
   @ApiNotFoundResponse({ description: 'Log not found' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
@@ -122,7 +122,7 @@ export class LogsController {
   @Put('/:id')
   async update(
     @Param('id') id: number,
-    @Body() log: LogsDto,
+    @Body() log: LogBody,
   ): Promise<UpdateResult> {
     return await this.logsService.updateLogs(id, log);
   }
@@ -138,8 +138,8 @@ export class LogsController {
     return await this.logsService.deleteLogs(id);
   }
 
-  @EventPattern('logs_created')
-  async handleEventCreated(@Payload() data: LogsDto) {
+  @EventPattern(LogEventType.LOGS_CREATE)
+  async handleEventCreated(@Payload() data: LogBody) {
     await this.logsService.createLogs(data);
   }
 
