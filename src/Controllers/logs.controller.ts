@@ -1,18 +1,21 @@
 import {
-    Body,
-    Controller, Delete,
-    Get,
-    Inject, Param,
-    Post, Put,
-    Query,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+  Query,
 } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import {
-    ApiBody,
-    ApiCreatedResponse,
-    ApiInternalServerErrorResponse,
-    ApiNotFoundResponse,
-    ApiParam,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import * as ILogsService from '../Objects/Interfaces/ILogsService';
@@ -77,15 +80,23 @@ export class LogsController {
     type: LogBody,
   })
   @Get()
+  @EventPattern(LogEventType.LOGS_GET_FILTERS)
   async findWithFilters(
     @Query('numberOfElement') numberOfElement?: number,
     @Query('startingElement') startingElement?: number,
-    @Query('codeOfEvent') codeOfEvent? : string ,
-    @Query('microserviceName') microserviceName? : string ,
-    @Query('startDate') startDate? : string,
-    @Query('endDate') endDate? : string
+    @Query('codeOfEvent') codeOfEvent?: string,
+    @Query('microserviceName') microserviceName?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
   ): Promise<LogBody[]> {
-    return await this.logsService.getLogsWithParameters(numberOfElement,startingElement,codeOfEvent,microserviceName,startDate,endDate);
+    return await this.logsService.getLogsWithParameters(
+      numberOfElement,
+      startingElement,
+      codeOfEvent,
+      microserviceName,
+      startDate,
+      endDate,
+    );
   }
 
   @ApiParam({ name: 'id', type: 'number', required: true })
@@ -142,5 +153,4 @@ export class LogsController {
   async handleEventCreated(@Payload() data: LogBody) {
     await this.logsService.createLogs(data);
   }
-
 }
