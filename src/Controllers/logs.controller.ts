@@ -1,27 +1,27 @@
+import { LogBody, LogEventType } from '@bato-urbanflow/urbanflow-models';
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Inject,
-  Param,
-  Post,
-  Put,
-  Query,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Inject,
+    Param,
+    Post,
+    Put,
+    Query,
 } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import {
-  ApiBody,
-  ApiCreatedResponse,
-  ApiInternalServerErrorResponse,
-  ApiNotFoundResponse,
-  ApiParam,
+    ApiBody,
+    ApiCreatedResponse,
+    ApiInternalServerErrorResponse,
+    ApiNotFoundResponse,
+    ApiParam,
 } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import * as ILogsService from '../Objects/Interfaces/ILogsService';
 import { DeleteResultDto } from '../Objects/DTOs/deleteResult.dto';
 import { UpdateResultDto } from '../Objects/DTOs/updateResult.dto';
-import { LogEventType, LogBody } from '@bato-urbanflow/urbanflow-models';
+import * as ILogsService from '../Objects/Interfaces/ILogsService';
 
 @Controller('logs')
 export class LogsController {
