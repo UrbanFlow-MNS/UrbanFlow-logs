@@ -151,6 +151,6 @@ export class LogsController {
 
   @MessagePattern({ cmd: LogEventType.LOGS_CREATE })
   async handleEventCreated(@Payload() data: LogBody) {
-    await this.logsService.createLogs(data);
+    return await this.logsService.createLogs(data);
   }
 }
