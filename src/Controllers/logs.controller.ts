@@ -10,7 +10,7 @@ import {
     Put,
     Query,
 } from '@nestjs/common';
-import { EventPattern, Payload } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
     ApiBody,
     ApiCreatedResponse,
@@ -79,23 +79,22 @@ export class LogsController {
     description: 'Search successful',
     type: LogBody,
   })
-  @Get()
-  @EventPattern(LogEventType.LOGS_GET_FILTERS)
-  async findWithFilters(
-    @Query('numberOfElement') numberOfElement?: number,
-    @Query('startingElement') startingElement?: number,
-    @Query('codeOfEvent') codeOfEvent?: string,
-    @Query('microserviceName') microserviceName?: string,
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
-  ): Promise<LogBody[]> {
+  @MessagePattern({ cmd: LogEventType.LOGS_GET_FILTERS })
+  async findWithFilters(@Payload() payload: {
+    numberOfElement?: number,
+    startingElement?: number,
+    codeOfEvent?: string,
+    microserviceName?: string,
+    startDate?: string,
+    endDate?: string,
+  }): Promise<LogBody[]> {
     return await this.logsService.getLogsWithParameters(
-      numberOfElement,
-      startingElement,
-      codeOfEvent,
-      microserviceName,
-      startDate,
-      endDate,
+      payload.numberOfElement,
+      payload.startingElement,
+      payload.codeOfEvent,
+      payload.microserviceName,
+      payload.startDate,
+      payload.endDate,
     );
   }
 
@@ -149,8 +148,8 @@ export class LogsController {
     return await this.logsService.deleteLogs(id);
   }
 
-  @EventPattern(LogEventType.LOGS_CREATE)
+  @MessagePattern({ cmd: LogEventType.LOGS_CREATE })
   async handleEventCreated(@Payload() data: LogBody) {
-    await this.logsService.createLogs(data);
+    return await this.logsService.createLogs(data);
   }
 }
