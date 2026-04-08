@@ -80,7 +80,7 @@ export class LogsController {
     type: LogBody,
   })
   @Get()
-  @MessagePattern(LogEventType.LOGS_GET_FILTERS)
+  @MessagePattern({ cmd: LogEventType.LOGS_GET_FILTERS })
   async findWithFilters(
     @Query('numberOfElement') numberOfElement?: number,
     @Query('startingElement') startingElement?: number,
@@ -149,7 +149,7 @@ export class LogsController {
     return await this.logsService.deleteLogs(id);
   }
 
-  @MessagePattern(LogEventType.LOGS_CREATE)
+  @MessagePattern({ cmd: LogEventType.LOGS_CREATE })
   async handleEventCreated(@Payload() data: LogBody) {
     await this.logsService.createLogs(data);
   }
