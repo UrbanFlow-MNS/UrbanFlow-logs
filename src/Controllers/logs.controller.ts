@@ -79,23 +79,22 @@ export class LogsController {
     description: 'Search successful',
     type: LogBody,
   })
-  @Get()
   @MessagePattern({ cmd: LogEventType.LOGS_GET_FILTERS })
-  async findWithFilters(
-    @Query('numberOfElement') numberOfElement?: number,
-    @Query('startingElement') startingElement?: number,
-    @Query('codeOfEvent') codeOfEvent?: string,
-    @Query('microserviceName') microserviceName?: string,
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
-  ): Promise<LogBody[]> {
+  async findWithFilters(@Payload() payload: {
+    numberOfElement?: number,
+    startingElement?: number,
+    codeOfEvent?: string,
+    microserviceName?: string,
+    startDate?: string,
+    endDate?: string,
+  }): Promise<LogBody[]> {
     return await this.logsService.getLogsWithParameters(
-      numberOfElement,
-      startingElement,
-      codeOfEvent,
-      microserviceName,
-      startDate,
-      endDate,
+      payload.numberOfElement,
+      payload.startingElement,
+      payload.codeOfEvent,
+      payload.microserviceName,
+      payload.startDate,
+      payload.endDate,
     );
   }
 
