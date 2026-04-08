@@ -43,11 +43,17 @@ export class LogsService implements ILogsService {
 
     let parsedStartDate : Date | undefined
     let parsedEndDate : Date | undefined
-    if(startDate !== undefined){
-      parsedStartDate = new Date(Date.parse(startDate))
+    if (startDate !== undefined && startDate !== 'undefined' && startDate !== '') {
+      const parsed = new Date(Date.parse(startDate));
+      if (!isNaN(parsed.getTime())) {
+        parsedStartDate = parsed;
+      }
     }
-    if(endDate !== undefined){
-      parsedEndDate = new Date(Date.parse(endDate))
+    if (endDate !== undefined && endDate !== 'undefined' && endDate !== '') {
+      const parsed = new Date(Date.parse(endDate));
+      if (!isNaN(parsed.getTime())) {
+        parsedEndDate = parsed;
+      }
     }
 
     const fetchedLogs : LogBody[] = await this.logsRepository.find({
