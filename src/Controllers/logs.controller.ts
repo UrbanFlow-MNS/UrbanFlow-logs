@@ -8,7 +8,6 @@ import {
     Param,
     Post,
     Put,
-    Query,
 } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
