@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LogBody } from '@bato-urbanflow/urbanflow-models';
 import { LogsController } from './logs.controller';
@@ -13,22 +14,22 @@ const buildLog = (): LogBody =>
 describe('LogsController', () => {
   let controller: LogsController;
   let service: {
-    getAllLogs: jest.Mock;
-    getLogsWithParameters: jest.Mock;
-    getWithId: jest.Mock;
-    createLogs: jest.Mock;
-    updateLogs: jest.Mock;
-    deleteLogs: jest.Mock;
+    getAllLogs: Mock;
+    getLogsWithParameters: Mock;
+    getWithId: Mock;
+    createLogs: Mock;
+    updateLogs: Mock;
+    deleteLogs: Mock;
   };
 
   beforeEach(async () => {
     service = {
-      getAllLogs: jest.fn(),
-      getLogsWithParameters: jest.fn(),
-      getWithId: jest.fn(),
-      createLogs: jest.fn(),
-      updateLogs: jest.fn(),
-      deleteLogs: jest.fn(),
+      getAllLogs: vi.fn(),
+      getLogsWithParameters: vi.fn(),
+      getWithId: vi.fn(),
+      createLogs: vi.fn(),
+      updateLogs: vi.fn(),
+      deleteLogs: vi.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
