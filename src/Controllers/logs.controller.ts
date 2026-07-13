@@ -6,6 +6,7 @@ import {
     Get,
     Inject,
     Param,
+    ParseIntPipe,
     Post,
     Put,
 } from '@nestjs/common';
@@ -105,7 +106,7 @@ export class LogsController {
     type: LogBody,
   })
   @Get('/:id')
-  async getWithId(@Param('id') id: number): Promise<LogBody> {
+  async getWithId(@Param('id', ParseIntPipe) id: number): Promise<LogBody> {
     return await this.logsService.getWithId(id);
   }
 
@@ -130,7 +131,7 @@ export class LogsController {
   })
   @Put('/:id')
   async update(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() log: LogBody,
   ): Promise<UpdateResult> {
     return await this.logsService.updateLogs(id, log);
@@ -143,7 +144,7 @@ export class LogsController {
     type: DeleteResultDto,
   })
   @Delete('/:id')
-  async delete(@Param('id') id: number): Promise<DeleteResult> {
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return await this.logsService.deleteLogs(id);
   }
 
