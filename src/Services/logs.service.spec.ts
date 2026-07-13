@@ -83,6 +83,8 @@ describe('LogsService', () => {
           codeOfEvent: undefined,
           createdAt: undefined,
         },
+        skip: 0,
+        take: 50,
       });
     });
 
@@ -134,23 +136,28 @@ describe('LogsService', () => {
       expect(repository.find!.mock.calls[0][0].where.createdAt).toBeUndefined();
     });
 
-    it('slices the result using startingElement and numberOfElement', async () => {
-      const logs = Array.from({ length: 5 }, (_, index) =>
-        buildLog({ id: index + 1 }),
-      );
+    it('paginates via skip and take at the database level', async () => {
+      const logs = [buildLog(), buildLog({ id: 2 })];
       repository.find!.mockResolvedValue(logs);
 
       const result = await service.getLogsWithParameters(3, 1);
 
-      expect(result).toEqual(logs.slice(1, 3));
+      expect(result).toBe(logs);
+      expect(repository.find!.mock.calls[0][0]).toMatchObject({
+        skip: 1,
+        take: 3,
+      });
     });
 
-    it('throws when startingElement is out of range', async () => {
-      repository.find!.mockResolvedValue([buildLog()]);
+    it('caps take at 100 to prevent unbounded queries', async () => {
+      repository.find!.mockResolvedValue([]);
 
-      await expect(
-        service.getLogsWithParameters(undefined, 5),
-      ).rejects.toThrow('The starting element is greater than the number of element');
+      await service.getLogsWithParameters(500, 0);
+
+      expect(repository.find!.mock.calls[0][0]).toMatchObject({
+        skip: 0,
+        take: 100,
+      });
     });
   });
 

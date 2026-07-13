@@ -56,24 +56,15 @@ export class LogsService implements ILogsService {
       }
     }
 
-    const fetchedLogs : LogBody[] = await this.logsRepository.find({
+    return await this.logsRepository.find({
       where : {
         microserviceName: microserviceName,
         codeOfEvent: codeOfEvent,
         createdAt: dateUtils.getDateFindOperator(parsedStartDate, parsedEndDate)
-      }
+      },
+      skip: startingElement ?? 0,
+      take: Math.min(numberOfElement ?? 50, 100),
     });
-    if(startingElement === undefined) {
-      startingElement = 0
-    } else if (startingElement >= fetchedLogs.length) {
-      throw new Error("The starting element is greater than the number of element")
-    }
-
-    if(numberOfElement === undefined){
-      numberOfElement = 50 // valeur max dans tout les cas pour éviter un call trop important
-    }
-
-    return fetchedLogs.slice(startingElement, numberOfElement)
   }
 
   async createLogs(logsDto: LogBody): Promise<LogBody> {
