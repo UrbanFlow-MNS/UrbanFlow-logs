@@ -109,6 +109,6 @@ describe('Logs API (e2e)', () => {
     const response = await request(app.getHttpServer()).delete('/logs/1');
 
     expect(response.status).toBe(200);
-    expect(repository.delete).toHaveBeenCalledWith('1');
+    expect(repository.delete).toHaveBeenCalledWith(1);
   });
 });
