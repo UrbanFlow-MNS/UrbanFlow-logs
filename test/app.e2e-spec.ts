@@ -21,12 +21,12 @@ const buildLog = (overrides: Partial<LogsEntity> = {}): LogsEntity => ({
 describe('Logs API (e2e)', () => {
   let app: INestApplication<App>;
   const repository = {
-    find: jest.fn(),
-    findOne: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
+    find: vi.fn(),
+    findOne: vi.fn(),
+    create: vi.fn(),
+    save: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
   };
 
   beforeAll(async () => {
@@ -50,7 +50,7 @@ describe('Logs API (e2e)', () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('GET /metrics exposes prometheus metrics', async () => {
