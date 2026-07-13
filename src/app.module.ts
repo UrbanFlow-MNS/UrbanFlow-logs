@@ -20,7 +20,7 @@ import { PrometheusController } from './Controllers/prometheus.controller';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [LogsEntity],
-      synchronize: Boolean(process.env.POSTGRES_SYNCHRONISE),
+      synchronize: process.env.POSTGRES_SYNCHRONISE === 'true',
     }),
     TypeOrmModule.forFeature([LogsEntity]),
   ],
